@@ -130,7 +130,7 @@ void dft(double complex in[],double complex out[], int len) {
   for (k = 0; k < len; k++) {
     for (t = 0; t < len; t++) {
       angle = (2 * M_PI * t * k)/len;
-      printf("%.2f\t%.2f\t%.2f\n",angle,cos(angle),sin(angle));
+      //printf("%.2f\t%.2f\t%.2f\n",angle,cos(angle),sin(angle));
       __real__ out[k] += __real__ in[t] * cos(angle) + __imag__ in[t] * sin(angle);
       __imag__ out[k] += -(__real__ in[t]) * sin(angle) + __imag__ in[t] * cos(angle);
     }
@@ -196,9 +196,15 @@ int dft_test(int test) {
 
 int main(int argc, char *argv[]) {
 
+  if (argc != 2) {
+    printf("usage: ./dft <int> where <int> is an integer between and 3.\n");
+    return -1;
+  }
 
-  dft_test(3);
+  int test = atoi(argv[1]);
+  dft_test(test);
   //complex_demo();
   //summation();
+  return 0;
 }
 
