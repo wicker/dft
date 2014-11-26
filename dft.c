@@ -143,8 +143,8 @@ int dft_test(int test) {
   printf("              dft test #%d              \n",test);
   printf("---------------------------------------\n");
 
-  double inreal[10];
-  double inimag[10];
+  double inreal[10] = {0.0};
+  double inimag[10] = {0.0};
   double outreal[10];
   double outimag[10];
   double *pir,*pii,*por,*poi;
@@ -176,7 +176,7 @@ int dft_test(int test) {
       print_complex_array(len,pb);
       break;
     case 3:
-      __real__ inreal[0] = 1.00;
+      inreal[0] = 1.00;
       compute_dft(pir,pii,por,poi,len);
       printf("input array\n");
       int i;
