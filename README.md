@@ -3,13 +3,9 @@ wickerlib
 
 All my one-off implementations to figure out how things work.
 
-**dft.c**
+**dft.c implements the discrete Fourier transform**
 
-dft.c works with complex.h and math.h libraries
-
-The summation() and complex\_demo() functions were functions to figur out how complex.h and summation work. 
-
-dft() implements the discrete Fourier transform on an input array of up to 20 complex elements.
+The summation() and complex\_demo() functions are reference functions for how complex.h and summation work. dft() implements the discrete Fourier transform on an input array of up to 20 complex elements and it depends on the complex.h and math.h libraries.
 
 Compile with
 
