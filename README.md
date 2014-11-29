@@ -13,9 +13,10 @@ Compile with
 
 Run with
 
-<code>usage: ./dft <int> <filename>
-where <int> is an integer between 1 and 20
-and <filename> is a text file to catch output data</code>
+```usage: ./dft 'int' 'filename'
+where 'int' is an integer between 1 and 20
+and 'filename' is a text file to catch output data
+```
 
 The code generates a set of 20 input x(t) and output X(k) array pairs that can be read into your graphing software of choice.
 
