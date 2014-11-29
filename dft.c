@@ -6,9 +6,6 @@
 #include <complex.h>
 #include <math.h>
 
-#define ARGS 3
-#define DATAPOINTS 4
-
 #define M_PI 3.14159265358979323846264338327
 // you can use no complex to remove 'complex' keyword 
 //__STDC_NO_COMPLEX__
@@ -21,42 +18,19 @@
 
 typedef enum { false, true } bool;
 
+void print_complex_array(int len, double complex array[]);
 void complex_demo();
+void summation();
 void dft(double complex in[], double complex out[], int len);
 int dft_test();
-void print_complex_array(int len, double complex array[]);
-void compute_dft(double inreal[], double inimag[], double outreal[], double outimag[], int n);
 
 void print_complex_array(int len, double complex array[]) {
-
   int i;
   for (i = 0; i < len; i++)
     printf("array[%d] = %.2f + %.2fi\n",i,__real__ array[i],__imag__ array[i]);
-  
 }
 
-
-/* 
- * Computes the discrete Fourier transform (DFT) of the given vector.
- * All the array arguments must have the same length.
- */
-void compute_dft(double inreal[], double inimag[], double outreal[], double outimag[], int n) {
-  int k;
-  for (k = 0; k < n; k++) {  /* For each output element */
-    double sumreal = 0;
-    double sumimag = 0;
-    int t;
-    for (t = 0; t < n; t++) {  /* For each input element */
-      double angle = 2 * M_PI * t * k / n;
-      sumreal +=  inreal[t] * cos(angle) + inimag[t] * sin(angle);
-      sumimag += -inreal[t] * sin(angle) + inimag[t] * cos(angle);
-    }
-    outreal[k] = sumreal;
-    outimag[k] = sumimag;
-  }
-}
-
-// so I remember later how to work with complex numbers
+// some examples of working with complex.h library
 void complex_demo() {
 
   int i;
@@ -108,7 +82,7 @@ void complex_demo() {
 void summation() {
   int t,k;
   int n = 3;
-  int X[10] = {0};
+  int X[10] = {0.0};
   printf("---------------------------------------\n");
   printf("      non-complex summation demo       \n");
   printf("---------------------------------------\n");
@@ -137,59 +111,25 @@ void dft(double complex in[],double complex out[], int len) {
   }
 }
 
-int dft_test(int test) {
+int dft_test(int len) {
 
   printf("---------------------------------------\n");
-  printf("              dft test #%d              \n",test);
+  printf("              dft test              \n");
   printf("---------------------------------------\n");
 
-  double inreal[10] = {0.0};
-  double inimag[10] = {0.0};
-  double outreal[10];
-  double outimag[10];
-  double *pir,*pii,*por,*poi;
-  pir = inreal;
-  pii = inimag;
-  por = outreal;
-  poi = outimag;
-
-  int len = 4;
-  double complex a[10] = {0.0+0.0I};
-  double complex b[10] = {0.0+0.0I};
+  double complex a[20] = {0.0+0.0I};
+  double complex b[20] = {0.0+0.0I};
   double complex *pa = a, *pb = b;
 
-  switch(test) {
-    case 1:
-      __real__ a[0] = 2.00;
-      dft(pa,pb,len);
-      printf("input array\n");
-      print_complex_array(len,pa);
-      printf("output array\n");
-      print_complex_array(len,pb);
-      break;
-    case 2:
-      __real__ a[1] = 1.00;
-      dft(pa,pb,len);
-      printf("input array\n");
-      print_complex_array(len,pa);
-      printf("output array\n");
-      print_complex_array(len,pb);
-      break;
-    case 3:
-      inreal[0] = 1.00;
-      compute_dft(pir,pii,por,poi,len);
-      printf("input array\n");
-      int i;
-      for (i = 0; i < len; i++)
-        printf("%.2f + %.2fi\n",pir[i],pii[i]);
-      printf("output array\n");
-      for (i = 0; i < len; i++)
-        printf("%.2f + %.2fi\n",por[i],poi[i]);
-      break;
-    default:
-      printf("the requested test case does not exist.\n");
-  } 
-  
+  for (int i = 0; i < len; i++) {
+    a[i] = 1.00;
+    dft(pa,pb,len);
+    printf("input array #%d\n",i);
+    print_complex_array(len,pa);
+    printf("output array #%d\n",i);
+    print_complex_array(len,pb);
+    a[i++] = 0.00;
+  }
 
   return 0;
 }
@@ -197,12 +137,17 @@ int dft_test(int test) {
 int main(int argc, char *argv[]) {
 
   if (argc != 2) {
-    printf("usage: ./dft <int> where <int> is an integer between and 3.\n");
+    printf("usage: ./dft <int> where <int> is an integer between 1 and 20.\n");
     return -1;
   }
 
-  int test = atoi(argv[1]);
-  dft_test(test);
+  int len = atoi(argv[1]);
+  if (len > 20 || len < 1) {
+    printf("usage: ./dft <int> where <int> is an integer between 1 and 20.\n");
+    return -1;
+  }
+
+  dft_test(len);
   //complex_demo();
   //summation();
   return 0;
