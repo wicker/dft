@@ -7,6 +7,7 @@
 #include <math.h>
 
 #define M_PI 3.14159265358979323846264338327
+
 // you can use no complex to remove 'complex' keyword 
 //__STDC_NO_COMPLEX__
 
@@ -18,16 +19,17 @@
 
 typedef enum { false, true } bool;
 
-void print_complex_array(int len, double complex array[]);
+void print_complex_array(int len, double complex array[], FILE* outfile, char* t);
 void complex_demo();
 void summation();
 void dft(double complex in[], double complex out[], int len);
-int dft_test();
+int dft_test(int len, FILE* outfile);
 
-void print_complex_array(int len, double complex array[]) {
+void print_complex_array(int len, double complex array[], FILE* outfile, char* t) {
   int i;
   for (i = 0; i < len; i++)
-    printf("array[%d] = %.2f + %.2fi\n",i,__real__ array[i],__imag__ array[i]);
+    fprintf(outfile,"%d %s %.2f %.2f\n",i,t,__real__ array[i],__imag__ array[i]);
+
 }
 
 // some examples of working with complex.h library
@@ -111,7 +113,7 @@ void dft(double complex in[],double complex out[], int len) {
   }
 }
 
-int dft_test(int len) {
+int dft_test(int len,FILE* outfile) {
 
   printf("---------------------------------------\n");
   printf("              dft test              \n");
@@ -125,10 +127,10 @@ int dft_test(int len) {
     a[i] = 1.00;
     dft(pa,pb,len);
     printf("input array #%d\n",i);
-    print_complex_array(len,pa);
+    print_complex_array(len,pa,outfile,"in");
     printf("output array #%d\n",i);
-    print_complex_array(len,pb);
-    a[i++] = 0.00;
+    print_complex_array(len,pb,outfile,"out");
+    a[i] = 0.00;
   }
 
   return 0;
@@ -136,20 +138,27 @@ int dft_test(int len) {
 
 int main(int argc, char *argv[]) {
 
-  if (argc != 2) {
-    printf("usage: ./dft <int> where <int> is an integer between 1 and 20.\n");
+  if (argc != 3) {
+    printf("usage: ./dft <int> <filename>\n"
+    "where <int> is an integer between 1 and 20\n"
+    "and <filename> is a text file to catch output data\n");
     return -1;
   }
 
   int len = atoi(argv[1]);
   if (len > 20 || len < 1) {
-    printf("usage: ./dft <int> where <int> is an integer between 1 and 20.\n");
+    printf("usage: ./dft <int> <filename>\n"
+    "where <int> is an integer between 1 and 20\n"
+    "and <filename> is a text file to catch output data\n");
     return -1;
   }
 
-  dft_test(len);
+  FILE* outfile = fopen(argv[2],"wb");
+  dft_test(len,outfile);
+  fclose(outfile);
+
   //complex_demo();
   //summation();
-  return 0;
+    return 0;
 }
 
