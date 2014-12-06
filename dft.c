@@ -24,12 +24,22 @@ void complex_demo();
 void summation();
 void dft(double complex in[], double complex out[], int len);
 int dft_test(int len, FILE* outfile);
+void print_dft_case(int len, double complex inarray[],double complex outarray[],FILE* outfile);
+
+// this generates the particular gnuplot file format we want
+void print_dft_case(int len, double complex inarray[],double complex outarray[],FILE* outfile) {
+  int i;
+  for (i = 0; i < len; i++)
+    fprintf(outfile,"%d %.2f %.2f %.2f %.2f\n",i,__real__ inarray[i], __imag__ inarray[i], __real__ outarray[i], __imag__ outarray[i]);
+  fprintf(outfile,"\n\n"); // add this to add output case breaks in the dat file
+}
+
 
 void print_complex_array(int len, double complex array[], FILE* outfile, char* t) {
   int i;
   for (i = 0; i < len; i++)
     fprintf(outfile,"%d %s %.2f %.2f\n",i,t,__real__ array[i],__imag__ array[i]);
-
+  fprintf(outfile,"\n\n"); // add this to add output case breaks in the dat file
 }
 
 // some examples of working with complex.h library
@@ -126,10 +136,14 @@ int dft_test(int len,FILE* outfile) {
   for (int i = 0; i < len; i++) {
     a[i] = 1.00;
     dft(pa,pb,len);
-    printf("input array #%d\n",i);
-    print_complex_array(len,pa,outfile,"in");
-    printf("output array #%d\n",i);
-    print_complex_array(len,pb,outfile,"out");
+    fprintf(outfile, "\"case %d\"\n",i);
+    print_dft_case(len,pa,pb,outfile);
+//  fprintf(outfile,"\"case %d input\"\n",i);
+//  printf("input array #%d\n",i);
+//  print_complex_array(len,pa,outfile,"in");
+//  fprintf(outfile,"\"case %d output\"\n",i);
+//  printf("output array #%d\n",i);
+//  print_complex_array(len,pb,outfile,"out");
     a[i] = 0.00;
   }
 
